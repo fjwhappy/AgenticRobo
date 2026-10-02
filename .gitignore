@@ -1,0 +1,50 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Env / secrets
+.env
+.env.*
+*.pem
+*.key
+id_*
+
+# Pi / PI WEB local state (keep project skills tracked)
+.pi/*
+!.pi/skills/
+.pi-web/
+
+# Large artifacts pulled from the remote server
+checkpoints/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.gguf
+*.hdf5
+*.h5
+*.zarr/
+*.mp4
+
+# Eval outputs / logs (keep final CSV reports in results/)
+eval_result/
+logs/
+*.log
+results/**/raw/
+tmp/
+.pi/
+plans/
