@@ -1,0 +1,39 @@
+name: runner-smoke-test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/runner-smoke-test.yml
+
+jobs:
+  smoke:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 10
+    steps:
+      - name: Host info
+        run: |
+          echo "runner=$RUNNER_NAME host=$(hostname) user=$(whoami)"
+          echo "workspace=$GITHUB_WORKSPACE"
+          uname -a
+          nproc
+          free -h | sed -n 2p
+          df -h "$GITHUB_WORKSPACE" | tail -1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Repo contents
+        run: ls -la
+
+      - name: GPUs
+        run: nvidia-smi --query-gpu=index,name,memory.used,memory.total,utilization.gpu --format=csv
+
+      - name: Network (GitHub + mirrors)
+        run: |
+          for u in https://api.github.com https://hf-mirror.com https://pypi.org/simple/; do
+            printf '%-32s ' "$u"; curl -s -o /dev/null -m 10 -w '%{http_code}\n' "$u" || echo FAIL
+          done
+
+      - name: Project data visible
+        run: ls /data/sgx_mac/agentic_robo/RoboDojo/XPolicyLab/policy/Pi_05/checkpoints/
